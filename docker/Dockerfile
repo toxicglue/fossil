@@ -29,7 +29,10 @@ ENV REPO_PATH=/data/repos
 ENV REPO_NAME=fossil.fossil
 ENV REPO=${REPO_PATH}/${REPO_NAME}
 
-ENV PARAM_MULTI_REPOS=
+
+ENV MULTI_REPO=
+ENV SINGLE_REPO=1
+ENV PARAM_MULTI_REPO=--repolist
 ENV PARAM_HTTPS=
 ENV PARAMS=${REPO_NAME}
 
@@ -49,6 +52,5 @@ WORKDIR ${REPO_PATH}
 EXPOSE ${PORT}
 
 USER fossil
-CMD ["sh", "-c", "/usr/local/bin/fossil server --port ${PORT} ${PARAM_HTTPS} ${REPO}"]
 
-#CMD ["/usr/local/bin/fossil", "server", "--port", "8181", "--https", "--repolist", "/data/repos"]
+CMD ["sh", "-c", "${FOSSIL} server --port ${PORT} ${PARAM_HTTPS} ${SINGLE_REPO:+$REPO} ${MULTI_REPO:+$PARAM_MULTI_REPO} ${MULTI_REPO:+$REPO_PATH} "]

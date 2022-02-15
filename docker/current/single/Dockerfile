@@ -24,6 +24,7 @@ ENV FOSSIL_BINARY=/usr/local/bin/fossil
 ENV FOSSIL_PORT=8181
 ENV FOSSIL_REPO_PATH=/data/repos
 ENV REPO_NAME=fossil.fossil
+ENV FOSSIL_REPO=${FOSSIL_REPO_PATH}/${REPO_NAME}
 ENV PARAM_MULTI_REPOS=
 ENV PARAM_HTTPS=
 ENV PARAMS=${REPO_NAME}
@@ -43,13 +44,18 @@ WORKDIR ${FOSSIL_REPO_PATH}
 EXPOSE ${FOSSIL_PORT}
 
 USER fossil
+CMD ["sh", "-c", "/usr/local/bin/fossil server --port ${FOSSIL_PORT} ${PARAM_HTTPS} ${FOSSIL_REPO}"]
+
+#CMD ["sh", "-c", "/usr/local/bin/fossil server --port ${FOSSIL_PORT} ${PARAM_HTTPS} ${FOSSIL_REPO} --repolist /data/repos"]
+
 #CMD ["/usr/local/bin/fossil", "server", "--port", "8181", "--https", "--repolist", "/data/repos"]
-# CMD ["sh", "-c", "${FOSSIL_BINARY}", "server", "--port", "${FOSSIL_PORT}", "${PARAM}"]
+
+#CMD ["sh", "-c", "${FOSSIL_BINARY}", "server", "--port", "${FOSSIL_PORT}", "/data/repos/fossil.fossil"]
 #CMD ["sh", "-c", "${FOSSIL_BINARY} server --port ${FOSSIL_PORT} ${PARAM_HTTPS} ${PARAM_MULTI_REPOS} ${FOSSIL_REPO_PATH} ${REPO_NAME}"]
 #RUN if [ "$MULTI_SUPPORT" = "True" ]; then \
 #       export COMMAND_LINE="sh -c /usr/local/bin/fossil server --port 8181 --https --repolist /data/repos"; \
 #        else \
 #       export COMMAND_LINE="sh -c /usr/local/bin/fossil server --port 8181 --https /data/repos/fossil.fossil"; \
 #        fi 
-CMD ["sh", "-c", "${COMMAND_LINE}"]
+#CMD ["sh", "-c", "${COMMAND_LINE}"]
 

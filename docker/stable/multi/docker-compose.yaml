@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  fossil:
+    image: toxicglue/fossil:latest
+    container_name: fossil
+    volumes:
+      - fossil-volume:/data/repos
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+volumes:
+    fossil-volume:

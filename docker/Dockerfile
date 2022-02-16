@@ -34,19 +34,19 @@ ENV MULTI_REPO_PARAM=--repolist
 
 # Configurable parameter
 ENV PORT=8181
+ENV USERNAME=admin
+ENV PASSWORD=admin123
 ENV START_PAGE=
 ENV HTTPS_PROXY=
 ENV MULTI_REPO=
 ENV SINGLE_REPO=1
 
 
-
-
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
 
-RUN mkdir -p /data/repos \
-        && /usr/local/bin/fossil init -A admin /data/repos/fossil.fossil \
-        && /usr/local/bin/fossil sql "UPDATE user SET pw='admin123' WHERE login='admin';" -R /data/repos/fossil.fossil \
+RUN mkdir -p ${REPO_PATH} \
+        && ${FOSSIL} init -A ${USERNAME} /data/repos/fossil.fossil \
+        && ${FOSSIL} sql "UPDATE user SET pw='admin123' WHERE login='admin';" -R /data/repos/fossil.fossil \
     && addgroup -Sg 400 fossil \
         && adduser -Su 400 -G fossil fossil \
         && chown -R fossil:fossil /data \

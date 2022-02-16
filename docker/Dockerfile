@@ -27,6 +27,8 @@ ENV FOSSIL=/usr/local/bin/fossil
 ENV REPO_PATH=/data/repos
 ENV REPO_NAME=fossil.fossil
 ENV REPO=${REPO_PATH}/${REPO_NAME}
+ENV USERNAME=admin
+ENV PASSWORD=admin1234
 
 # Fossil parameters - do not change
 ENV HTTPS_PROXY_PARAM=--https
@@ -34,8 +36,6 @@ ENV MULTI_REPO_PARAM=--repolist
 
 # Configurable parameter
 ENV PORT=8181
-ENV USERNAME=admin
-ENV PASSWORD=admin123
 ENV START_PAGE=
 ENV HTTPS_PROXY=
 ENV MULTI_REPO=
@@ -45,8 +45,8 @@ ENV SINGLE_REPO=1
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
 
 RUN mkdir -p ${REPO_PATH} \
-        && ${FOSSIL} init -A ${USERNAME} /data/repos/fossil.fossil \
-        && ${FOSSIL} sql "UPDATE user SET pw='admin123' WHERE login='admin';" -R /data/repos/fossil.fossil \
+        && ${FOSSIL} init -A ${USERNAME} ${REPO} \
+        && ${FOSSIL} sql "UPDATE user SET pw='${PASSWORD}' WHERE login='${USERNAME}';" -R ${REPO} \
     && addgroup -Sg 400 fossil \
         && adduser -Su 400 -G fossil fossil \
         && chown -R fossil:fossil /data \

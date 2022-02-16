@@ -22,19 +22,25 @@ make install
 
 FROM alpine:latest AS production
 
+# Dockerfile parameters
 ENV FOSSIL=/usr/local/bin/fossil
-ENV PORT=8181
-
 ENV REPO_PATH=/data/repos
 ENV REPO_NAME=fossil.fossil
 ENV REPO=${REPO_PATH}/${REPO_NAME}
 
+# Fossil parameters - do not change
+ENV HTTPS_PROXY_PARAM=--https
+ENV MULTI_REPO_PARAM=--repolist
 
+# Configurable parameter
+ENV PORT=8181
+ENV START_PAGE=
+ENV HTTPS_PROXY=
 ENV MULTI_REPO=
 ENV SINGLE_REPO=1
-ENV PARAM_MULTI_REPO=--repolist
-ENV PARAM_HTTPS=
-ENV PARAMS=${REPO_NAME}
+
+
+
 
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
 
@@ -53,4 +59,4 @@ EXPOSE ${PORT}
 
 USER fossil
 
-CMD ["sh", "-c", "${FOSSIL} server --port ${PORT} ${PARAM_HTTPS} ${SINGLE_REPO:+$REPO} ${MULTI_REPO:+$PARAM_MULTI_REPO} ${MULTI_REPO:+$REPO_PATH} "]
+CMD ["sh", "-c", "${FOSSIL} server --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM} ${SINGLE_REPO:+$REPO} ${MULTI_REPO:+$MULTI_REPO_PARAM} ${MULTI_REPO:+$REPO_PATH} "]

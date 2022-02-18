@@ -4,7 +4,6 @@ services:
     image: toxicglue/fossil:latest
     container_name: fossil
     environment:
-
        - PORT=8181
        - MULTI_REPO=
        - SINGLE_REPO=1

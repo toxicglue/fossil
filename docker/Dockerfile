@@ -25,17 +25,19 @@ FROM alpine:latest AS production
 # Dockerfile parameters
 ENV FOSSIL=/usr/local/bin/fossil
 ENV REPO_PATH=/data/repos
+ENV BACKUP_PATH=/data/backup
+ENV SCRIPT_PATH=/data/script
 ENV REPO_NAME=fossil.fossil
 ENV REPO=${REPO_PATH}/${REPO_NAME}
 ENV USERNAME=admin
 ENV PASSWORD=admin1234
+ENV PORT=8181
 
 # Fossil parameters - do not change
 ENV HTTPS_PROXY_PARAM=--https
 ENV MULTI_REPO_PARAM=--repolist
 
 # Configurable parameter
-ENV PORT=8181
 ENV START_PAGE=
 ENV HTTPS_PROXY=
 ENV MULTI_REPO=
@@ -45,13 +47,15 @@ ENV SINGLE_REPO=1
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
 
 RUN mkdir -p ${REPO_PATH} \
-        && ${FOSSIL} init -A ${USERNAME} ${REPO} \
-        && ${FOSSIL} sql "UPDATE user SET pw='${PASSWORD}' WHERE login='${USERNAME}';" -R ${REPO} \
+    && mkdir -p ${BACKUP_PATH} \
+    && mkdir -p ${SCRIPT_PATH} \
+    && ${FOSSIL} init -A ${USERNAME} ${REPO} \
+    && ${FOSSIL} sql "UPDATE user SET pw='${PASSWORD}' WHERE login='${USERNAME}';" -R ${REPO} \
     && addgroup -Sg 400 fossil \
-        && adduser -Su 400 -G fossil fossil \
-        && chown -R fossil:fossil /data \
+    && adduser -Su 400 -G fossil fossil \
+    && chown -R fossil:fossil /data \
     && chown fossil:fossil ${FOSSIL} \
-        && chmod a+x ${FOSSIL}
+    && chmod a+x ${FOSSIL}
 
 WORKDIR ${REPO_PATH}
 

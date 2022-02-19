@@ -4,6 +4,9 @@
 
 This is a simple docker container for [Fossil](https://fossil-scm.org) with support for multiple repositories.
 
+- Docker images (**Docker hub**): https://hub.docker.com/repository/docker/toxicglue/fossil
+- Source code and bug tracking (**GitHub**) : https://github.com/toxicglue/fossil
+
 **username:** admin
 
 **password:** admin1234

@@ -43,7 +43,6 @@ ENV HTTPS_PROXY=
 ENV MULTI_REPO=
 ENV SINGLE_REPO=1
 
-
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
 
 RUN mkdir -p ${REPO_PATH} \

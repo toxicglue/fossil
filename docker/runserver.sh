@@ -1,19 +1,32 @@
 #!/bin/sh
 
-if [ ! -e “/data/fossil.fossil” ]
+if [ ! -z ${REPOS} ]
 then
-/usr/local/bin/fossil init -A $USERNAME /data/fossil.fossil
+    REPOS="fossil.fossil"
 fi
 
-if [ ! -z $PASSWORD ]
+if [ ! -e “${REPO_PATH}/${REPOS}” ]
 then
-/usr/local/bin/fossil user password $USERNAME $PASSWORD -R /data/fossil.fossil
+    echo "${FOSSIL} init -A ${USERNAME} ${REPO_PATH}/${REPOS}"
+    ${FOSSIL} init -A ${USERNAME} ${REPO_PATH}/${REPOS}
+fi
+
+if [ ! -z ${PASSWORD} ]
+then
+    echo "${FOSSIL} user password ${USERNAME} ${PASSWORD} -R ${REPO_PATH}/${REPOS}"
+    ${FOSSIL} user password ${USERNAME} ${PASSWORD} -R ${REPO_PATH}/${REPOS}
 fi
 
 unset $USERNAME
 unset $PASSWORD
 
-if [ -w “/data/fossil.fossil” ]
+if [ -w “/data/repos/$REPOS” ]
 then
-/usr/local/bin/fossil server /data/fossil.fossil --scgi --port 9000
+    if [ ! -z $MULTI_REPO ]	
+        echo "${FOSSIL} server ${REPO_PATH}/${REPOS} --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}"
+        ${FOSSIL} server ${REPO_PATH}/${REPOS} --port ${PORT}
+    else
+        echo "${FOSSIL} server --repolist $REPO_PATH --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}"
+        ${FOSSIL} server --repolist $REPO_PATH --port ${PORT}
+    fi
 fi

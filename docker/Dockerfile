@@ -22,30 +22,14 @@ make install
 
 FROM alpine:latest AS production
 
-# Dockerfile parameters
 ENV FOSSIL=/usr/local/bin/fossil
 ENV RUNSERVER=/usr/local/bin/runserver.sh
 ENV REPO_PATH=/data/repos
 ENV BACKUP_PATH=/data/backup
 ENV SCRIPT_PATH=/data/script
-
-#ENV REPO_NAME=fossil.fossil
-#ENV REPO=${REPO_PATH}/${REPO_NAME}
-
 ENV PORT=8181
 
-# Fossil parameters - do not change
-ENV HTTPS_PROXY_PARAM=--https
-ENV MULTI_REPO_PARAM=--repolist
-
-# Configurable parameter
-ENV START_PAGE=
-ENV HTTPS_PROXY=
-ENV MULTI_REPO=
-ENV SINGLE_REPO=1
-
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
-
 COPY runserver.sh ${RUNSERVER}
 
 RUN mkdir -p ${REPO_PATH} \

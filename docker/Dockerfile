@@ -3,7 +3,7 @@
 # ================
 FROM alpine:latest AS buildstage
 
-ARG FOSSIL_VERSION=2.17
+ARG FOSSIL_VERSION=2.18
 ARG FOSSIL_URL=https://fossil-scm.org/home/tarball/version-${FOSSIL_VERSION}/fossil-${FOSSIL_VERSION}.tar.gz
 WORKDIR /build
 
@@ -64,6 +64,4 @@ WORKDIR ${REPO_PATH}
 EXPOSE ${PORT}
 
 USER fossil
-CMD ["sh"]
-
-#CMD ["sh", "-c", "${FOSSIL} server --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM} ${SINGLE_REPO:+$REPO} ${MULTI_REPO:+$MULTI_REPO_PARAM} ${MULTI_REPO:+$REPO_PATH} "]
+CMD ["/usr/local/bin/runserver.sh"]

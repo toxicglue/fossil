@@ -28,10 +28,10 @@ ENV RUNSERVER=/usr/local/bin/runserver.sh
 ENV REPO_PATH=/data/repos
 ENV BACKUP_PATH=/data/backup
 ENV SCRIPT_PATH=/data/script
-ENV REPO_NAME=fossil.fossil
-ENV REPO=${REPO_PATH}/${REPO_NAME}
-ENV USERNAME=admin
-ENV PASSWORD=admin1234
+
+#ENV REPO_NAME=fossil.fossil
+#ENV REPO=${REPO_PATH}/${REPO_NAME}
+
 ENV PORT=8181
 
 # Fossil parameters - do not change

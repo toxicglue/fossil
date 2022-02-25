@@ -24,6 +24,7 @@ FROM alpine:latest AS production
 
 # Dockerfile parameters
 ENV FOSSIL=/usr/local/bin/fossil
+ENV RUNSERVER=/usr/local/bin/runserver.sh
 ENV REPO_PATH=/data/repos
 ENV BACKUP_PATH=/data/backup
 ENV SCRIPT_PATH=/data/script
@@ -45,21 +46,24 @@ ENV SINGLE_REPO=1
 
 COPY --from=buildstage /usr/local/bin/fossil ${FOSSIL}
 
+COPY runserver.sh ${RUNSERVER}
+
 RUN mkdir -p ${REPO_PATH} \
     && mkdir -p ${BACKUP_PATH} \
     && mkdir -p ${SCRIPT_PATH} \
-    && ${FOSSIL} init -A ${USERNAME} ${REPO} \
-    && ${FOSSIL} sql "UPDATE user SET pw='${PASSWORD}' WHERE login='${USERNAME}';" -R ${REPO} \
     && addgroup -Sg 400 fossil \
     && adduser -Su 400 -G fossil fossil \
     && chown -R fossil:fossil /data \
     && chown fossil:fossil ${FOSSIL} \
-    && chmod a+x ${FOSSIL}
+    && chmod a+x ${FOSSIL} \
+    && chown fossil:fossil ${RUNSERVER} \
+    && chmod a+x ${RUNSERVER}
 
 WORKDIR ${REPO_PATH}
 
 EXPOSE ${PORT}
 
 USER fossil
+CMD ["sh"]
 
-CMD ["sh", "-c", "${FOSSIL} server --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM} ${SINGLE_REPO:+$REPO} ${MULTI_REPO:+$MULTI_REPO_PARAM} ${MULTI_REPO:+$REPO_PATH} "]
+#CMD ["sh", "-c", "${FOSSIL} server --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM} ${SINGLE_REPO:+$REPO} ${MULTI_REPO:+$MULTI_REPO_PARAM} ${MULTI_REPO:+$REPO_PATH} "]

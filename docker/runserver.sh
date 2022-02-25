@@ -1,6 +1,18 @@
 #!/bin/sh
 
 
+# Fossil parameters
+HTTPS_PROXY_PARAM=--https
+MULTI_REPO_PARAM=--repolist
+PROJECT_NAME_PARAM=--project-name
+PROJECT_DESC_PARAM=--project-desc
+
+# Configurable parameter
+ENV START_PAGE=
+ENV HTTPS_PROXY=
+ENV MULTI_REPO=
+ENV SINGLE_REPO=1
+
 # Set default values
 if [ -z ${REPOS} ] ; then
     REPOS="fossil.fossil"
@@ -34,10 +46,10 @@ unset $PASSWORD
 if [ -e ${REPO_PATH}/${REPOS} ] ; then
     if [ ! -z ${MULTI_REPO} ] ; then
         echo "${FOSSIL} server ${REPO_PATH}/${REPOS} --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}"
-        ${FOSSIL} server ${REPO_PATH}/${REPOS} --port ${PORT}
+        ${FOSSIL} server ${REPO_PATH}/${REPOS} --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}
     else
-        echo "${FOSSIL} server --repolist ${REPO_PATH} --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}"
-        ${FOSSIL} server --repolist ${REPO_PATH} --port ${PORT}
+        echo "${FOSSIL} server ${MULTI_REPO_PARAM} ${REPO_PATH} --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}"
+        ${FOSSIL} server ${MULTI_REPO_PARAM} ${REPO_PATH} --port ${PORT} ${HTTPS_PROXY:+$HTTPS_PROXY_PARAM}
     fi
 fi
 

@@ -69,15 +69,16 @@ volumes:
 
 There are some **optional** ENV variables that could be used.
 
-| **REPOS**          | Name of the repository (default: fossil.fossil)                                    |
-| **PASSWORD**       | Password for the repository (default: admin1234)                                   |
-| **USERNAME**       | Admin username for the repository (default: admin)                                 |
-| **PROJECT_NAME**   | Project name for the repository                                                    |
-| **PROJECT_DESC**   | Project description for the repository                                             |
-| **HTTPS_PROXY**    | A non empty value (ex: MULTI_REPO=1) will enable https proxy.                      |
-|                    | Should be enabled if you have some kind of proxy, like nginx proxy manager         |                                                       
-| **MULTI_REPO**     | A non empty value (ex: MULTI_REPO=1) will enable support                           |      
-|                    | for multiple repos (like github)                                                   |
+| ENV          	| DESCRIPTION                                                                                                                                	|
+|--------------	|--------------------------------------------------------------------------------------------------------------------------------------------	|
+| REPOS        	| Name of the repository (default: fossil.fossil)                                                                                            	|
+| PASSWORD     	| Password for the repository (default: admin1234)                                                                                           	|
+| USERNAME     	| Admin username for the repository (default: admin)                                                                                         	|
+| PROJECT_NAME 	| Project name for the repository                                                                                                            	|
+| PROJECT_DESC 	| Project description for the repository                                                                                                     	|
+| HTTPS_PROXY  	| A non empty value (ex: MULTI_REPO=1) will enable https proxy.  Should be enabled if you have some kind of proxy,  like nginx proxy manager 	|
+| MULTI_REPO   	| A non empty value (ex: MULTI_REPO=1) will enable support for  multiple repos (like github)                                                 	|
+|              	|                                                                                                                                            	|                                         |
 
 ---
 ## Misc scenarios 

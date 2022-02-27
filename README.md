@@ -4,8 +4,8 @@
 
 This is a simple docker container for [Fossil](https://fossil-scm.org) with support for multiple repositories.
 
-- Docker images (**Docker hub**): https://hub.docker.com/repository/docker/toxicglue/fossil
-- Source code and bug tracking (**GitHub**) : https://github.com/toxicglue/fossil
+- Docker images (Docker hub): [https://hub.docker.com/repository/docker/toxicglue/fossil](https://hub.docker.com/repository/docker/toxicglue/fossil)
+- Source code and bug tracking (GitHub) : [https://github.com/toxicglue/fossil](https://github.com/toxicglue/fossil)
 
 **username:** admin
 
@@ -50,10 +50,11 @@ services:
     image: toxicglue/fossil:latest
     container_name: fossil
     environment:
-       - PORT=8181
-       - MULTI_REPO=
-       - SINGLE_REPO=1
-       - HTTPS_PROXY=
+       - REPOS=source.fossil
+       - PROJECT_NAME=Repository
+       - USERNAME=admin
+       - PASSWORD=admin1234
+       - HTTPS_PROXY=1
     volumes:
       - fossil-volume:/data/repos
     ports:
@@ -66,72 +67,24 @@ volumes:
 ---
 ## ENV variables
 
-### PORT
-Set PORT to your external port number. 
+There are some **optional** ENV variables that could be used.
 
-This is the port that makes fossil externally accessible.
-This Example makes Fossil accessible from the port 80 (default web)
-
-```yaml
-PORT=80
-```
-
----
-
-### MULTI_REPO
-Support for multiple repositories, like Github.
-
-If this option is selected, then the parameter SINGLE_REPO has to be inactivated (```SINGLE_REPO=```)
-
-**Activated :**
-
-```yaml
-MULTI_REPO=1
-```
-
-**Disabled :**
-```yaml
-MULTI_REPO=
-```
+| **REPOS**          | Name of the repository (default: fossil.fossil)                                    |
+| **PASSWORD**       | Password for the repository (default: admin1234)                                   |
+| **USERNAME**       | Admin username for the repository (default: admin)                                 |
+| **PROJECT_NAME**   | Project name for the repository                                                    |
+| **PROJECT_DESC**   | Project description for the repository                                             |
+| **HTTPS_PROXY**    | A non empty value (ex: MULTI_REPO=1) will enable https proxy.                      |
+|                    | Should be enabled if you have some kind of proxy, like nginx proxy manager         |                                                       
+| **MULTI_REPO**     | A non empty value (ex: MULTI_REPO=1) will enable support                           |      
+|                    | for multiple repos (like github)                                                   |
 
 ---
+## Misc scenarios 
 
-### SINGLE_REPO
-Default option. Only one repository will be used.
-If this option is selected, then the parameter MULTI_REPO has to be inactivated (```MULTI_REPO=```)
+### Add a new repository
 
-**Activated :**
-
-```yaml
-SINGLE_REPO=1
-```
-
-**Disabled :**
-
-```yaml
-SINGLE_REPO=
-```
----
-
-### HTTPS_PROXY
-Needs to be activated if you are using a proxy, like [Nginx Proxy Manager](https://nginxproxymanager.com/).
-
-**Activated :**
-
-```yaml
-HTTPS_PROXY=1
-```
-
-**Disabled :**
-
-```yaml
-HTTPS_PROXY=
-```
-
----
-## Add a new repository
-
-You can create new repositories from docker commandline.
+You can create new repositories from docker command line.
 
 In this example we create en new repository (site) called: myproject.fossil with admin as the owner.
 Please change the repository name and owner for your own need.
@@ -140,6 +93,23 @@ Please change the repository name and owner for your own need.
 sudo docker container exec fossil fossil init -A admin myproject.fossil
 
 ```
+
+### Add existing repository
+
+If you have an existing repository you can add it to your fossil docker volume, this way.
+
+```bash
+
+# Step-1: fetch the fossil docker volume path
+docker volume inspect --format '{{ .Mountpoint }}' fossil_fossil-volume
+
+# Step-2: copy fossil repos to fossil docker volume 
+cp <previous_fossil.fossil> <fossil_volume_path>/<previous_fossil.fossil>
+
+```
+
+### Backup a repository
+
 
 ---
 ## Links
